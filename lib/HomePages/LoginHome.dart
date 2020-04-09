@@ -23,22 +23,41 @@ class _LoginHomePageState extends State<LoginHomePage> {
       children: <Widget>[
         Container(
           alignment: Alignment.center,
-          color: Colors.blueAccent,
+          color: Colors.white,
           child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-            
+              FlutterLogo(size: 150),
+              SizedBox(height: 50),
               Container(
                 width: 300.0,
-                child: RaisedButton(
-                child: Text('Google'),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(40))),
-                elevation: 8.0,
-                color: Colors.red,
-                
+                child: OutlineButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                    highlightElevation: 0,
+                    borderSide: BorderSide(color: Colors.grey),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image(image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png"), height: 35.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Sign in with Google',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
                 onPressed: () async{
-                    dynamic result = _auth.signInWithGoogle();
+                    dynamic result = await _auth.signInWithGoogle();
                     if(result!=null) {
                       setState(() {
                         _auth=result;
@@ -46,12 +65,12 @@ class _LoginHomePageState extends State<LoginHomePage> {
                         name = result.firebaseUser.displayName;
                         email = result.firebaseUSer.email;
                       });
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
                     }
 
                 }),
               ),
-            
+
             ],
           )
         )

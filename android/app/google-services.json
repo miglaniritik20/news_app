@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "359618160111-f33u2rkon6o98uarhhlf0e8q9jju2sb4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ritik.newsapp",
+            "certificate_hash": "821400626abe04b64cdc16a16bc77e0f0593a80c"
+          }
+        },
+        {
           "client_id": "359618160111-qr2cof850k321hjmv0aqc3sb73tfr1pb.apps.googleusercontent.com",
           "client_type": 3
         }
