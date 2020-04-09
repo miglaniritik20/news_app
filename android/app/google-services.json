@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "359618160111",
+    "firebase_url": "https://news-c5293.firebaseio.com",
+    "project_id": "news-c5293",
+    "storage_bucket": "news-c5293.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359618160111:android:b05e69fa73ab5b48eac21a",
+        "android_client_info": {
+          "package_name": "com.ritik.newsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359618160111-qr2cof850k321hjmv0aqc3sb73tfr1pb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7i3u-MBWwV3gHtOph3mNxLku2QWMImgY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359618160111-qr2cof850k321hjmv0aqc3sb73tfr1pb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
