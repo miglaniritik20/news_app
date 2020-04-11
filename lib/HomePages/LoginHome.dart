@@ -65,7 +65,7 @@ class _LoginHomePageState extends State<LoginHomePage> {
                         name = result.firebaseUser.displayName;
                         email = result.firebaseUSer.email;
                       });
-                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
                     }
 
                 }),
