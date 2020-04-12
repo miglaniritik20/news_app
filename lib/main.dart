@@ -16,6 +16,9 @@ class MyApp extends StatelessWidget {
       child: new MaterialApp(
         title: 'News App',
         home: new Wrapper(),
+        theme: ThemeData(
+          primarySwatch: Colors.indigo
+        ),
         debugShowCheckedModeBanner: false,
       ),
     );
