@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -35,12 +36,14 @@ class _HomePageState extends State<HomePage> {
       newsItems.add(neitem);
     }
     print(newsItems.length);
-    if(newsItems.length==0){
+    if (newsItems.length == 0) {
       return null;
-    }else{return newsItems;}
-    
+    } else {
+      return newsItems;
+    }
   }
-  var off=false;
+
+  var off = false;
   var isLoading = false;
   _deleteData() async {
     setState(() {
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadFromApi();
+    
   }
 
   Widget getDrawerContent(BuildContext context) {
@@ -136,8 +139,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Go Offline',
             onPressed: () async {
               setState(() {
-                off==true?off=false:off=true;
+                off == true ? off = false : off = true;
               });
             },
           ),
@@ -179,10 +180,11 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomPadding: true,
     );
   }
+
   Widget _getListViewWidget() {
     return new Flexible(
       child: FutureBuilder(
-          future:  off?DbProvider.db.getAllNews():_getData(),
+          future: off ? DbProvider.db.getAllNews() : _getData(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
@@ -195,78 +197,84 @@ class _HomePageState extends State<HomePage> {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return Description(snapshot.data[index].url);
-                      }));
-                    },
-                    splashColor: Colors.black12,
-                    child: new Container(
-                      margin: EdgeInsets.all(8.0),
-                      //color: Colors.white,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12, width: 2.0),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                            snapshot.data[index].imglink==null?Container(height: 240,child: Placeholder(),): Image(
-                                image:
-                                    NetworkImage(snapshot.data[index].imglink),
-                                fit: BoxFit.fill,
-                                alignment: Alignment.topCenter,
-                                height: 240.0,
-                                width: MediaQuery.of(context).size.width,
-                              ),
-                              // Positioned(
-                              //     top: 0,
-                              //     right: 0,
-                              //     child: IconButton(
-                              //       onPressed: null,
-                              //       icon: Icon(
-                              //         Icons.bookmark,
-                              //         color: Colors.blueAccent,
-                              //         size: 40,
-                              //       ),
-                              //     ))
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0,
-                                right: 10.0,
-                                bottom: 10.0,
-                                left: 10.0),
-                            child: Text(
-                              snapshot.data[index].title,
-                              style: TextStyle(
+                  return new Container(
+                    margin: EdgeInsets.all(8.0),
+                    //color: Colors.white,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black12, width: 2.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                                  new MaterialPageRoute(builder: (context) {
+                                return Description(snapshot.data[index].url);
+                              }));
+                            },
+                            splashColor: Colors.black12,
+                            child: Column(
+                              children: <Widget>[
+                                snapshot.data[index].imglink == null
+                                    ? Container(
+                                        height: 240,
+                                        child: Placeholder(),
+                                      )
+                                    : CachedNetworkImage(
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(),
+                                        imageUrl: snapshot.data[index].imglink,
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10.0,
+                                      right: 10.0,
+                                      bottom: 10.0,
+                                      left: 10.0),
+                                  child: Text(
+                                    snapshot.data[index].title,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 3.0,
+                                      right: 10.0,
+                                      bottom: 10.0,
+                                      left: 10.0),
+                                  child: Container(
+                                    child: Text(
+                                      snapshot.data[index].description,
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 15.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        ListTile(
+                            leading: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.network(
+                                  'https://static.thenounproject.com/png/2345410-200.png',
+                                  scale: 5,
+                                )),
+                            trailing: IconButton(
+                                icon: Icon(
+                                  Icons.bookmark_border,
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 23.0),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 3.0,
-                                right: 10.0,
-                                bottom: 10.0,
-                                left: 10.0),
-                            child: Container(
-                              child: Text(
-                                snapshot.data[index].description,
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 18.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                                  size: 30,
+                                ),
+                                onPressed: ()=>_loadFromApi())),
+                      ],
                     ),
                   );
                 }, //_buildNewsItem,
@@ -275,4 +283,4 @@ class _HomePageState extends State<HomePage> {
           }),
     );
   }
- }
+}
