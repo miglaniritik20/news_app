@@ -1,25 +1,24 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
-import 'package:newsapp/DB_provider/db_provider.dart';
-import 'package:newsapp/DB_provider/news_api_provider.dart';
-import 'package:newsapp/DescriptionPages/description.dart';
-import 'package:newsapp/HomePages/LoginHome.dart';
-import 'package:newsapp/Services/Authenticate.dart';
-import 'package:newsapp/modules/news.dart';
+import '../DB_provider/db_provider.dart';
+import '../DB_provider/news_api_provider.dart';
+import '../DescriptionPages/description.dart';
+import '../Services/Authenticate.dart';
+import '../modules/news.dart';
+import 'LoginHome.dart';
 
 class HomePage extends StatefulWidget {
-//  NetworkImage networkImage;
-//  final String name;
-//  final String email;
-//  HomePage(this.networkImage, this.name, this.email);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final GoogleSignIn _googleSignIn =new GoogleSignIn(scopes: ['email']);
   AuthService _authService = AuthService();
   LoginHomePage p1;
   Future<List<News>> _getData() async {
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       isLoading = false;
     });
 
-    print('All employees deleted');
+    print('All News deleted');
   }
 
   _loadFromApi() async {
@@ -81,16 +80,15 @@ class _HomePageState extends State<HomePage> {
   Widget getDrawerContent(BuildContext context) {
     return ListView(
       children: <Widget>[
-        UserAccountsDrawerHeader(
-          accountName: Text('Ritik'),
-          accountEmail: Text('ritikmiglani488@gmail.com'),
-          currentAccountPicture: GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.purple,
-              child: Text(' R'),
+        UserAccountsDrawerHeader(accountName: Text('Ritik'),
+             accountEmail: Text("ritikmiglani488@gmail.com"),
+             currentAccountPicture: GestureDetector(
+               child: CircleAvatar(
+                 //backgroundImage: NetworkImage(_googleSignIn.currentUser.photoUrl),
+                 backgroundColor: Colors.purple,
+                child: Text(' R'),
+             ),), 
             ),
-          ),
-        ),
         ListTile(
           title: new Text('Home'),
           onTap: () {},
@@ -113,12 +111,20 @@ class _HomePageState extends State<HomePage> {
         ),
         ListTile(
           title: new Text('Your Voice'),
+          onTap: () {
+          },
+          trailing: Icon(Icons.call),
+        ),
+        Divider(),
+        ListTile(
+          title: new Text('Logout'),
           onTap: () async {
             await _deleteData();
             await _authService.signOut();
           },
           trailing: Icon(Icons.call),
         ),
+        Divider(),
       ],
     );
   }
@@ -214,7 +220,8 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Stack(
                             children: <Widget>[
-                            snapshot.data[index].imglink==null?Container(height: 240,child: Placeholder(),): Image(
+                            snapshot.data[index].imglink==null?Container(height: 240,child:Placeholder(),): 
+                            Image(
                                 image:
                                     NetworkImage(snapshot.data[index].imglink),
                                 fit: BoxFit.fill,

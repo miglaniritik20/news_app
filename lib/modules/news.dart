@@ -26,7 +26,7 @@ class News {
         'imglink': imglink,
         'published': published
       };
-
+      
   @override
   String toString() {
     return '{${this.id},${this.title},${this.description},${this.url},${this.imglink},${this.published}';

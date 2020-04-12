@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/HomePages/HomePage.dart';
 import 'package:newsapp/Services/Authenticate.dart';
 
 class LoginHomePage extends StatefulWidget {
@@ -65,7 +64,7 @@ class _LoginHomePageState extends State<LoginHomePage> {
                         name = result.firebaseUser.displayName;
                         email = result.firebaseUSer.email;
                       });
-                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+                      
                     }
 
                 }),
