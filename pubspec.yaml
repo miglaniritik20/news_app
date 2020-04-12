@@ -33,6 +33,10 @@ dependencies:
   path_provider: ^1.6.5
   dio: ^3.0.9
   cached_network_image: ^2.1.0+1
+<<<<<<< HEAD
+  
+=======
+>>>>>>> offline
 
 dev_dependencies:
   flutter_test:

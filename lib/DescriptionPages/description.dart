@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:newsapp/modules/Data.dart';
 import 'dart:convert';
@@ -12,6 +13,7 @@ class Description extends StatefulWidget {
 }
 
 class _DescriptionState extends State<Description> {
+  final GoogleSignIn _googleSignIn =new GoogleSignIn();
   Future<DescriptionData> _getDescData() async {
     Response response = await get('https://api.sae.news:8888/articles/get' +
         widget.url +

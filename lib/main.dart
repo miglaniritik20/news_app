@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:newsapp/HomePages/HomePage.dart';
+import 'package:newsapp/HomePages/LoginHome.dart';
 import 'package:provider/provider.dart';
 import 'Services/Authenticate.dart';
 
@@ -27,7 +28,7 @@ class Wrapper extends StatelessWidget {
 
     final user=Provider.of<FirebaseUser>(context);
     if(user==null){
-      return HomePage();
+      return LoginHomePage();
     }else{
       return HomePage();
     }

@@ -2,25 +2,23 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
-import 'package:newsapp/DB_provider/db_provider.dart';
-import 'package:newsapp/DB_provider/news_api_provider.dart';
-import 'package:newsapp/DescriptionPages/description.dart';
-import 'package:newsapp/HomePages/LoginHome.dart';
-import 'package:newsapp/Services/Authenticate.dart';
-import 'package:newsapp/modules/news.dart';
+import '../DB_provider/db_provider.dart';
+import '../DB_provider/news_api_provider.dart';
+import '../DescriptionPages/description.dart';
+import '../Services/Authenticate.dart';
+import '../modules/news.dart';
+import 'LoginHome.dart';
 
 class HomePage extends StatefulWidget {
-//  NetworkImage networkImage;
-//  final String name;
-//  final String email;
-//  HomePage(this.networkImage, this.name, this.email);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final GoogleSignIn _googleSignIn =new GoogleSignIn(scopes: ['email']);
   AuthService _authService = AuthService();
   LoginHomePage p1;
   Future<List<News>> _getData() async {
@@ -59,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       isLoading = false;
     });
 
-    print('All employees deleted');
+    print('All News deleted');
   }
 
   _loadFromApi() async {
@@ -84,16 +82,15 @@ class _HomePageState extends State<HomePage> {
   Widget getDrawerContent(BuildContext context) {
     return ListView(
       children: <Widget>[
-        UserAccountsDrawerHeader(
-          accountName: Text('Ritik'),
-          accountEmail: Text('ritikmiglani488@gmail.com'),
-          currentAccountPicture: GestureDetector(
-            child: CircleAvatar(
-              backgroundColor: Colors.purple,
-              child: Text(' R'),
+        UserAccountsDrawerHeader(accountName: Text('Ritik'),
+             accountEmail: Text("ritikmiglani488@gmail.com"),
+             currentAccountPicture: GestureDetector(
+               child: CircleAvatar(
+                 //backgroundImage: NetworkImage(_googleSignIn.currentUser.photoUrl),
+                 backgroundColor: Colors.purple,
+                child: Text(' R'),
+             ),), 
             ),
-          ),
-        ),
         ListTile(
           title: new Text('Home'),
           onTap: () {},
@@ -116,12 +113,20 @@ class _HomePageState extends State<HomePage> {
         ),
         ListTile(
           title: new Text('Your Voice'),
+          onTap: () {
+          },
+          trailing: Icon(Icons.call),
+        ),
+        Divider(),
+        ListTile(
+          title: new Text('Logout'),
           onTap: () async {
             await _deleteData();
             await _authService.signOut();
           },
           trailing: Icon(Icons.call),
         ),
+        Divider(),
       ],
     );
   }
@@ -197,85 +202,62 @@ class _HomePageState extends State<HomePage> {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return new Container(
-                    margin: EdgeInsets.all(8.0),
-                    //color: Colors.white,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black12, width: 2.0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        InkWell(
-                            onTap: () {
-                              Navigator.push(context,
-                                  new MaterialPageRoute(builder: (context) {
-                                return Description(snapshot.data[index].url);
-                              }));
-                            },
-                            splashColor: Colors.black12,
-                            child: Column(
-                              children: <Widget>[
-                                snapshot.data[index].imglink == null
-                                    ? Container(
-                                        height: 240,
-                                        child: Placeholder(),
-                                      )
-                                    : CachedNetworkImage(
-                                        placeholder: (context, url) =>
-                                            CircularProgressIndicator(),
-                                        imageUrl: snapshot.data[index].imglink,
-                                      ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10.0,
-                                      right: 10.0,
-                                      bottom: 10.0,
-                                      left: 10.0),
-                                  child: Text(
-                                    snapshot.data[index].title,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 3.0,
-                                      right: 10.0,
-                                      bottom: 10.0,
-                                      left: 10.0),
-                                  child: Container(
-                                    child: Text(
-                                      snapshot.data[index].description,
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 15.0),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        ListTile(
-                            leading: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://static.thenounproject.com/png/2345410-200.png',
-                                  scale: 5,
-                                )),
-                            trailing: IconButton(
-                                icon: Icon(
-                                  Icons.bookmark_border,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          new MaterialPageRoute(builder: (context) {
+                        return Description(snapshot.data[index].url);
+                      }));
+                    },
+                    splashColor: Colors.black12,
+                    child: new Container(
+                      margin: EdgeInsets.all(8.0),
+                      //color: Colors.white,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black12, width: 2.0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Stack(
+                            children: <Widget>[
+                            snapshot.data[index].imglink==null?Container(height: 240,child:Placeholder(),): 
+                            Image(
+                                image:
+                                    NetworkImage(snapshot.data[index].imglink),
+                                fit: BoxFit.fill,
+                                alignment: Alignment.topCenter,
+                                height: 240.0,
+                                width: MediaQuery.of(context).size.width,
+                              ),
+                              // Positioned(
+                              //     top: 0,
+                              //     right: 0,
+                              //     child: IconButton(
+                              //       onPressed: null,
+                              //       icon: Icon(
+                              //         Icons.bookmark,
+                              //         color: Colors.blueAccent,
+                              //         size: 40,
+                              //       ),
+                              //     ))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0,
+                                right: 10.0,
+                                bottom: 10.0,
+                                left: 10.0),
+                            child: Text(
+                              snapshot.data[index].title,
+                              style: TextStyle(
                                   color: Colors.black,
-                                  size: 30,
+                                 
                                 ),
-                                onPressed: ()=>_loadFromApi())),
+                              )),
                       ],
-                    ),
+                    ),)
                   );
                 }, //_buildNewsItem,
               );
