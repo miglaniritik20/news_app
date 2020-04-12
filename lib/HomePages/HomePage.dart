@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,12 +34,14 @@ class _HomePageState extends State<HomePage> {
       newsItems.add(neitem);
     }
     print(newsItems.length);
-    if(newsItems.length==0){
+    if (newsItems.length == 0) {
       return null;
-    }else{return newsItems;}
-    
+    } else {
+      return newsItems;
+    }
   }
-  var off=false;
+
+  var off = false;
   var isLoading = false;
   _deleteData() async {
     setState(() {
@@ -74,7 +76,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadFromApi();
+    
   }
 
   Widget getDrawerContent(BuildContext context) {
@@ -142,8 +144,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             tooltip: 'Go Offline',
             onPressed: () async {
               setState(() {
-                off==true?off=false:off=true;
+                off == true ? off = false : off = true;
               });
             },
           ),
@@ -185,10 +185,11 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomPadding: true,
     );
   }
+
   Widget _getListViewWidget() {
     return new Flexible(
       child: FutureBuilder(
-          future:  off?DbProvider.db.getAllNews():_getData(),
+          future: off ? DbProvider.db.getAllNews() : _getData(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return Container(
@@ -252,29 +253,11 @@ class _HomePageState extends State<HomePage> {
                               snapshot.data[index].title,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 23.0),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 3.0,
-                                right: 10.0,
-                                bottom: 10.0,
-                                left: 10.0),
-                            child: Container(
-                              child: Text(
-                                snapshot.data[index].description,
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 18.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                                 
+                                ),
+                              )),
+                      ],
+                    ),)
                   );
                 }, //_buildNewsItem,
               );
@@ -282,4 +265,4 @@ class _HomePageState extends State<HomePage> {
           }),
     );
   }
- }
+}
